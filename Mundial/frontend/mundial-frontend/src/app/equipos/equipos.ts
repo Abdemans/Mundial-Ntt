@@ -1,7 +1,9 @@
 import { Component, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import type { Equipo, Jugador } from '../models';
+import { EquipoService, JugadorService } from '../services';
 import { MainNav } from '../shared/main-nav/main-nav';
 
 @Component({
@@ -12,70 +14,25 @@ import { MainNav } from '../shared/main-nav/main-nav';
 })
 export class Equipos {
   private readonly route = inject(ActivatedRoute);
+  private readonly equipoService = inject(EquipoService);
+  private readonly jugadorService = inject(JugadorService);
 
   protected readonly mostrarFormulario = signal(false);
   protected readonly mostrarFormularioEliminar = signal(false);
   protected readonly equipoSeleccionado = signal<Equipo | null>(null);
+  protected readonly equipos = toSignal(this.equipoService.equipos$, {
+    initialValue: [],
+  });
+  protected readonly jugadores = toSignal(this.jugadorService.jugadores$, {
+    initialValue: [],
+  });
+
   protected nuevoEquipo = {
     equipo: '',
     pais: '',
     seleccionador: '',
   };
   protected equipoAEliminar = '';
-
-  protected readonly equipos = signal<Equipo[]>([
-    {
-      equipo: 'ARGENTINA',
-      pais: 'Argentina',
-      seleccionador: 'Lionel Scaloni',
-    },
-    {
-      equipo: 'FRANCIA',
-      pais: 'Francia',
-      seleccionador: 'Didier Deschamps',
-    },
-    {
-      equipo: 'ESPAÑA',
-      pais: 'España',
-      seleccionador: 'Luis de la Fuente',
-    },
-  ]);
-
-  protected readonly jugadores = signal<Jugador[]>([
-    {
-      nombre: 'LIONEL MESSI',
-      direccion: 'Rosario',
-      puestoHab: 'Delantero',
-      fechaNac: '1987-06-24T00:00:00',
-      equipoJugador: {
-        equipo: 'ARGENTINA',
-        pais: 'Argentina',
-        seleccionador: 'Lionel Scaloni',
-      },
-    },
-    {
-      nombre: 'KYLIAN MBAPPE',
-      direccion: 'Paris',
-      puestoHab: 'Delantero',
-      fechaNac: '1998-12-20T00:00:00',
-      equipoJugador: {
-        equipo: 'FRANCIA',
-        pais: 'Francia',
-        seleccionador: 'Didier Deschamps',
-      },
-    },
-    {
-      nombre: 'RODRI',
-      direccion: 'Madrid',
-      puestoHab: 'Centrocampista',
-      fechaNac: '1996-06-22T00:00:00',
-      equipoJugador: {
-        equipo: 'ESPAÑA',
-        pais: 'España',
-        seleccionador: 'Luis de la Fuente',
-      },
-    },
-  ]);
 
   constructor() {
     const equipo = this.route.snapshot.paramMap.get('equipo');
@@ -100,7 +57,7 @@ export class Equipos {
       seleccionador: this.nuevoEquipo.seleccionador.trim(),
     };
 
-    this.equipos.update((equipos) => [...equipos, equipo]);
+    this.equipoService.anadirEquipo(equipo);
     this.nuevoEquipo = {
       equipo: '',
       pais: '',
@@ -112,9 +69,7 @@ export class Equipos {
   protected eliminarEquipo(): void {
     const equipo = this.equipoAEliminar.trim().toUpperCase();
 
-    this.equipos.update((equipos) =>
-      equipos.filter((registro) => registro.equipo !== equipo),
-    );
+    this.equipoService.eliminarEquipo(equipo);
     if (this.equipoSeleccionado()?.equipo === equipo) {
       this.equipoSeleccionado.set(null);
     }

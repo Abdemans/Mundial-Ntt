@@ -1,7 +1,9 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import type { Jugador } from '../models';
+import type { Equipo, Jugador } from '../models';
+import { EquipoService, JugadorService } from '../services';
 import { MainNav } from '../shared/main-nav/main-nav';
 
 @Component({
@@ -11,9 +13,16 @@ import { MainNav } from '../shared/main-nav/main-nav';
   styleUrl: './jugadores.css',
 })
 export class Jugadores {
+  private readonly equipoService = inject(EquipoService);
+  private readonly jugadorService = inject(JugadorService);
+
   protected readonly mostrarFormulario = signal(false);
   protected readonly mostrarFormularioEliminar = signal(false);
   protected readonly jugadorSeleccionado = signal<Jugador | null>(null);
+  protected readonly jugadores = toSignal(this.jugadorService.jugadores$, {
+    initialValue: [],
+  });
+
   protected nuevoJugador = {
     nombre: '',
     direccion: '',
@@ -22,42 +31,6 @@ export class Jugadores {
     equipo: '',
   };
   protected jugadorAEliminar = '';
-
-  protected readonly jugadores = signal<Jugador[]>([
-    {
-      nombre: 'LIONEL MESSI',
-      direccion: 'Rosario',
-      puestoHab: 'Delantero',
-      fechaNac: '1987-06-24',
-      equipoJugador: {
-        equipo: 'ARGENTINA',
-        pais: 'Argentina',
-        seleccionador: 'Lionel Scaloni',
-      },
-    },
-    {
-      nombre: 'KYLIAN MBAPPE',
-      direccion: 'Paris',
-      puestoHab: 'Delantero',
-      fechaNac: '1998-12-20',
-      equipoJugador: {
-        equipo: 'FRANCIA',
-        pais: 'Francia',
-        seleccionador: 'Didier Deschamps',
-      },
-    },
-    {
-      nombre: 'RODRI',
-      direccion: 'Madrid',
-      puestoHab: 'Centrocampista',
-      fechaNac: '1996-06-22',
-      equipoJugador: {
-        equipo: 'ESPAÑA',
-        pais: 'España',
-        seleccionador: 'Luis de la Fuente',
-      },
-    },
-  ]);
 
   protected alternarFormulario(): void {
     this.mostrarFormulario.update((visible) => !visible);
@@ -68,19 +41,21 @@ export class Jugadores {
   }
 
   protected anadirJugador(): void {
+    const equipoNombre = this.nuevoJugador.equipo.trim().toUpperCase();
+    const equipo: Equipo = this.equipoService.buscarEquipo(equipoNombre) ?? {
+      equipo: equipoNombre,
+      pais: '',
+      seleccionador: '',
+    };
     const jugador: Jugador = {
       nombre: this.nuevoJugador.nombre.trim().toUpperCase(),
       direccion: this.nuevoJugador.direccion.trim(),
       puestoHab: this.nuevoJugador.puestoHab.trim(),
       fechaNac: this.nuevoJugador.fechaNac,
-      equipoJugador: {
-        equipo: this.nuevoJugador.equipo.trim().toUpperCase(),
-        pais: '',
-        seleccionador: '',
-      },
+      equipoJugador: equipo,
     };
 
-    this.jugadores.update((jugadores) => [...jugadores, jugador]);
+    this.jugadorService.anadirJugador(jugador);
     this.nuevoJugador = {
       nombre: '',
       direccion: '',
@@ -94,9 +69,7 @@ export class Jugadores {
   protected eliminarJugador(): void {
     const nombre = this.jugadorAEliminar.trim().toUpperCase();
 
-    this.jugadores.update((jugadores) =>
-      jugadores.filter((jugador) => jugador.nombre !== nombre),
-    );
+    this.jugadorService.eliminarJugador(nombre);
     if (this.jugadorSeleccionado()?.nombre === nombre) {
       this.jugadorSeleccionado.set(null);
     }
