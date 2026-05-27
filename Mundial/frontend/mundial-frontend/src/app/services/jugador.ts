@@ -1,88 +1,84 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http'; // <-- Importante
 import { BehaviorSubject } from 'rxjs';
 import type { Equipo, Jugador } from '../models';
-
-const JUGADORES_INICIALES: Jugador[] = [
-  {
-    nombre: 'LIONEL MESSI',
-    direccion: 'Rosario',
-    puestoHab: 'Delantero',
-    fechaNac: '1987-06-24',
-    equipoJugador: {
-      equipo: 'ARGENTINA',
-      pais: 'Argentina',
-      seleccionador: 'Lionel Scaloni',
-    },
-  },
-  {
-    nombre: 'KYLIAN MBAPPE',
-    direccion: 'Paris',
-    puestoHab: 'Delantero',
-    fechaNac: '1998-12-20',
-    equipoJugador: {
-      equipo: 'FRANCIA',
-      pais: 'Francia',
-      seleccionador: 'Didier Deschamps',
-    },
-  },
-  {
-    nombre: 'RODRI',
-    direccion: 'Madrid',
-    puestoHab: 'Centrocampista',
-    fechaNac: '1996-06-22',
-    equipoJugador: {
-      equipo: 'ESPANA',
-      pais: 'Espana',
-      seleccionador: 'Luis de la Fuente',
-    },
-  },
-];
 
 @Injectable({
   providedIn: 'root',
 })
 export class JugadorService {
-  private readonly jugadoresSubject = new BehaviorSubject<Jugador[]>(JUGADORES_INICIALES);
+  private readonly http = inject(HttpClient);
+  private readonly apiUrl = 'http://localhost:8080/jugadores';
+
+  private readonly jugadoresSubject = new BehaviorSubject<Jugador[]>([]);
   readonly jugadores$ = this.jugadoresSubject.asObservable();
 
+  constructor() {
+    this.cargarJugadores(); // Carga inicial
+  }
+
+  cargarJugadores(): void {
+    this.http.get<any[]>(this.apiUrl).subscribe({
+      next: (backendData) => {
+        // Mapeamos lo que devuelve Spring Boot al formato que espera vuestro Angular
+        const frontendData: Jugador[] = backendData.map(j => ({
+          nombre: j.nombre,
+          direccion: j.direccion,
+          puestoHab: j.puesto_hab,
+          fechaNac: j.fecha_nac,
+          equipoJugador: j.equipo
+        }));
+        this.jugadoresSubject.next(frontendData);
+      },
+      error: (err) => console.error('Error cargando jugadores:', err)
+    });
+  }
+
   anadirJugador(jugador: Jugador): void {
-    this.jugadoresSubject.next([...this.jugadoresSubject.value, jugador]);
+    // Convertimos al formato que la entidad de Java espera recibir en el JSON
+    const bodyBackend = {
+      nombre: jugador.nombre,
+      direccion: jugador.direccion,
+      puesto_hab: jugador.puestoHab,
+      fecha_nac: jugador.fechaNac.includes(' ') ? jugador.fechaNac : `${jugador.fechaNac} 00:00:00`,
+      equipo: jugador.equipoJugador
+    };
+
+    this.http.post<any>(this.apiUrl, bodyBackend).subscribe({
+      next: () => this.cargarJugadores(),
+      error: (err) => console.error('Error al añadir jugador:', err)
+    });
   }
 
   eliminarJugador(nombre: string): void {
-    const jugador = nombre.trim().toUpperCase();
-
-    this.jugadoresSubject.next(
-      this.jugadoresSubject.value.filter((registro) => registro.nombre !== jugador),
-    );
+    this.http.delete(`${this.apiUrl}/${nombre}`).subscribe({
+      next: () => this.cargarJugadores(),
+      error: (err) => console.error('Error al eliminar jugador:', err)
+    });
   }
 
-<<<<<<< HEAD
+  actualizarJugador(nombreActual: string, jugadorActualizado: Jugador): void {
+    const bodyBackend = {
+      nombre: jugadorActualizado.nombre,
+      direccion: jugadorActualizado.direccion,
+      puesto_hab: jugadorActualizado.puestoHab,
+      fecha_nac: jugadorActualizado.fechaNac,
+      equipo: jugadorActualizado.equipoJugador
+    };
+
+    this.http.put<any>(`${this.apiUrl}/${nombreActual}`, bodyBackend).subscribe({
+      next: () => this.cargarJugadores(),
+      error: (err) => console.error('Error al actualizar jugador:', err)
+    });
+  }
+
   buscarJugador(nombre: string): Jugador | undefined {
     const jugador = nombre.trim().toUpperCase();
-
     return this.jugadoresSubject.value.find((registro) => registro.nombre === jugador);
-=======
-  actualizarJugador(nombreActual: string, jugadorActualizado: Jugador): void {
-    const jugador = nombreActual.trim().toUpperCase();
-
-    this.jugadoresSubject.next(
-      this.jugadoresSubject.value.map((registro) =>
-        registro.nombre === jugador ? jugadorActualizado : registro,
-      ),
-    );
   }
 
   actualizarEquipoDeJugadores(nombreActualEquipo: string, equipoActualizado: Equipo): void {
-    const equipo = nombreActualEquipo.trim().toUpperCase();
-
-    this.jugadoresSubject.next(
-      this.jugadoresSubject.value.map((jugador) =>
-        jugador.equipoJugador.equipo === equipo
-          ? { ...jugador, equipoJugador: equipoActualizado }
-          : jugador,
-      ),
-    );
->>>>>>> frontend-aaron
+    // Al estar conectados al backend, refrescar la lista es suficiente
+    this.cargarJugadores();
   }
 }
