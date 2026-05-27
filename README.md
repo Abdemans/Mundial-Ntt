@@ -10,6 +10,7 @@
   - BackEnd  -> Abde, Aaron
   - SQL      -> Abde
   - Crear repositorio -> Abde
-## PROBLEMAS: Problema con nombre diferentes entre el frontend y el backend
+## PROBLEMAS
+  - Problema con nombre diferentes entre el frontend y el backend
 ## ARRANQUE: 
   - En terminal poner el comando `ng serve`, eso levanterá el servicio de Angular llamando a Java
