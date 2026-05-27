@@ -19,6 +19,7 @@ export class Jugadores {
 
   protected readonly mostrarFormulario = signal(false);
   protected readonly mostrarFormularioEliminar = signal(false);
+  protected readonly mostrarFormularioActualizar = signal(false);
   protected readonly jugadorSeleccionado = signal<Jugador | null>(null);
   protected readonly errorJugador = signal('');
   protected readonly errorEquipo = signal('');
@@ -34,6 +35,14 @@ export class Jugadores {
     equipo: '',
   };
   protected jugadorAEliminar = '';
+  protected jugadorActualizado = {
+    nombreActual: '',
+    nombre: '',
+    direccion: '',
+    puestoHab: '',
+    fechaNac: '',
+    equipo: '',
+  };
 
   protected alternarFormulario(): void {
     this.mostrarFormulario.update((visible) => !visible);
@@ -43,6 +52,18 @@ export class Jugadores {
 
   protected alternarFormularioEliminar(): void {
     this.mostrarFormularioEliminar.update((visible) => !visible);
+  }
+
+  protected alternarFormularioActualizar(): void {
+    this.mostrarFormularioActualizar.update((visible) => {
+      const nuevoEstado = !visible;
+
+      if (nuevoEstado) {
+        this.precargarJugadorActualizado();
+      }
+
+      return nuevoEstado;
+    });
   }
 
   protected anadirJugador(): void {
@@ -92,9 +113,57 @@ export class Jugadores {
     this.mostrarFormularioEliminar.set(false);
   }
 
+  protected actualizarJugador(): void {
+    const nombreActual = this.jugadorActualizado.nombreActual.trim().toUpperCase();
+    const equipoNombre = this.jugadorActualizado.equipo.trim().toUpperCase();
+    const equipo: Equipo = this.equipoService.buscarEquipo(equipoNombre) ?? {
+      equipo: equipoNombre,
+      pais: '',
+      seleccionador: '',
+    };
+    const jugador: Jugador = {
+      nombre: this.jugadorActualizado.nombre.trim().toUpperCase(),
+      direccion: this.jugadorActualizado.direccion.trim(),
+      puestoHab: this.jugadorActualizado.puestoHab.trim(),
+      fechaNac: this.jugadorActualizado.fechaNac,
+      equipoJugador: equipo,
+    };
+
+    this.jugadorService.actualizarJugador(nombreActual, jugador);
+    if (this.jugadorSeleccionado()?.nombre === nombreActual) {
+      this.jugadorSeleccionado.set(jugador);
+    }
+    this.jugadorActualizado = {
+      nombreActual: '',
+      nombre: '',
+      direccion: '',
+      puestoHab: '',
+      fechaNac: '',
+      equipo: '',
+    };
+    this.mostrarFormularioActualizar.set(false);
+  }
+
   protected seleccionarJugador(jugador: Jugador): void {
     this.jugadorSeleccionado.update((seleccionado) =>
       seleccionado?.nombre === jugador.nombre ? null : jugador,
     );
+  }
+
+  private precargarJugadorActualizado(): void {
+    const jugador = this.jugadorSeleccionado();
+
+    if (!jugador) {
+      return;
+    }
+
+    this.jugadorActualizado = {
+      nombreActual: jugador.nombre,
+      nombre: jugador.nombre,
+      direccion: jugador.direccion,
+      puestoHab: jugador.puestoHab,
+      fechaNac: jugador.fechaNac,
+      equipo: jugador.equipoJugador.equipo,
+    };
   }
 }

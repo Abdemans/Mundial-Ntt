@@ -1,0 +1,9 @@
+com\example\mundial\model\Equipo.class
+com\example\mundial\model\Jugador.class
+com\example\mundial\Repository\JugadorRepository.class
+com\example\mundial\web\JugadorApiController.class
+com\example\mundial\Service\EquiposService.class
+com\example\mundial\MundialApplication.class
+com\example\mundial\Service\JugadorService.class
+com\example\mundial\Repository\EquipoRepository.class
+com\example\mundial\web\EquipoApiController.class

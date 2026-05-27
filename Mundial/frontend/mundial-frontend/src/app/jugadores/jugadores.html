@@ -11,6 +11,13 @@
         Añadir Jugador
       </button>
       <button
+        class="warning-button"
+        type="button"
+        (click)="alternarFormularioActualizar()"
+      >
+        Actualizar Jugador
+      </button>
+      <button
         class="danger-button"
         type="button"
         (click)="alternarFormularioEliminar()"
@@ -89,6 +96,85 @@
           </button>
           <button class="primary-button" type="submit" [disabled]="jugadorForm.invalid">
             Guardar
+          </button>
+        </div>
+      </form>
+    </section>
+  }
+
+  @if (mostrarFormularioActualizar()) {
+    <section class="form-panel" aria-label="Formulario de actualizar jugador">
+      <form (ngSubmit)="actualizarJugador()" #actualizarForm="ngForm">
+        <label>
+          Jugador actual
+          <input
+            name="nombreActual"
+            type="text"
+            required
+            [(ngModel)]="jugadorActualizado.nombreActual"
+          />
+        </label>
+
+        <label>
+          Nuevo nombre
+          <input
+            name="nombreActualizado"
+            type="text"
+            required
+            [(ngModel)]="jugadorActualizado.nombre"
+          />
+        </label>
+
+        <label>
+          Direccion
+          <input
+            name="direccionActualizada"
+            type="text"
+            required
+            [(ngModel)]="jugadorActualizado.direccion"
+          />
+        </label>
+
+        <label>
+          Puesto
+          <input
+            name="puestoHabActualizado"
+            type="text"
+            required
+            [(ngModel)]="jugadorActualizado.puestoHab"
+          />
+        </label>
+
+        <label>
+          Fecha nacimiento
+          <input
+            name="fechaNacActualizada"
+            type="datetime-local"
+            required
+            [(ngModel)]="jugadorActualizado.fechaNac"
+          />
+        </label>
+
+        <label>
+          Equipo
+          <input
+            name="equipoActualizado"
+            type="text"
+            required
+            [(ngModel)]="jugadorActualizado.equipo"
+          />
+        </label>
+
+        <div class="form-actions">
+          <button
+            class="secondary-button"
+            type="button"
+            (click)="alternarFormularioActualizar()"
+          >
+            Cancelar
+          </button>
+          <button class="warning-button" type="submit" [disabled]="actualizarForm.invalid">
+            Actualizar
           </button>
         </div>
       </form>

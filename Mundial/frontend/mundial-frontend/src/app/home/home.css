@@ -1,9 +1,7 @@
 :host {
   display: block;
   min-height: 100dvh;
-  background: #f6f8fb;
-  color: #172033;
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--text);
 }
 
 .home-content {
@@ -13,12 +11,18 @@
 }
 
 .welcome {
-  max-width: 44rem;
+  max-width: 46rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: linear-gradient(145deg, rgba(17, 24, 39, 0.86), rgba(31, 41, 55, 0.58));
+  box-shadow: var(--shadow);
+  padding: clamp(1.5rem, 4vw, 3rem);
+  backdrop-filter: blur(var(--blur));
 }
 
 .eyebrow {
   margin: 0 0 0.75rem;
-  color: #0b5ed7;
+  color: var(--primary-2);
   font-size: 0.875rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -26,14 +30,15 @@
 
 h1 {
   margin: 0;
-  font-size: 3rem;
+  color: var(--text);
+  font-size: clamp(2.25rem, 7vw, 4.5rem);
   line-height: 1.05;
 }
 
 .welcome p:last-child {
   max-width: 34rem;
   margin: 1rem 0 0;
-  color: #536075;
+  color: var(--text-muted);
   font-size: 1.125rem;
   line-height: 1.6;
 }

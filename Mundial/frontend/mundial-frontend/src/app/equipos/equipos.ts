@@ -20,6 +20,7 @@ export class Equipos {
 
   protected readonly mostrarFormulario = signal(false);
   protected readonly mostrarFormularioEliminar = signal(false);
+  protected readonly mostrarFormularioActualizar = signal(false);
   protected readonly equipoSeleccionado = signal<Equipo | null>(null);
   protected readonly errorEquipo = signal('');
   protected readonly equipos = toSignal(this.equipoService.equipos$, {
@@ -35,6 +36,12 @@ export class Equipos {
     seleccionador: '',
   };
   protected equipoAEliminar = '';
+  protected equipoActualizado = {
+    equipoActual: '',
+    equipo: '',
+    pais: '',
+    seleccionador: '',
+  };
 
   constructor() {
     const equipo = this.route.snapshot.paramMap.get('equipo');
@@ -51,6 +58,18 @@ export class Equipos {
 
   protected alternarFormularioEliminar(): void {
     this.mostrarFormularioEliminar.update((visible) => !visible);
+  }
+
+  protected alternarFormularioActualizar(): void {
+    this.mostrarFormularioActualizar.update((visible) => {
+      const nuevoEstado = !visible;
+
+      if (nuevoEstado) {
+        this.precargarEquipoActualizado();
+      }
+
+      return nuevoEstado;
+    });
   }
 
   protected anadirEquipo(): void {
@@ -88,6 +107,28 @@ export class Equipos {
     this.mostrarFormularioEliminar.set(false);
   }
 
+  protected actualizarEquipo(): void {
+    const equipoActual = this.equipoActualizado.equipoActual.trim().toUpperCase();
+    const equipo: Equipo = {
+      equipo: this.equipoActualizado.equipo.trim().toUpperCase(),
+      pais: this.equipoActualizado.pais.trim(),
+      seleccionador: this.equipoActualizado.seleccionador.trim(),
+    };
+
+    this.equipoService.actualizarEquipo(equipoActual, equipo);
+    this.jugadorService.actualizarEquipoDeJugadores(equipoActual, equipo);
+    if (this.equipoSeleccionado()?.equipo === equipoActual) {
+      this.equipoSeleccionado.set(equipo);
+    }
+    this.equipoActualizado = {
+      equipoActual: '',
+      equipo: '',
+      pais: '',
+      seleccionador: '',
+    };
+    this.mostrarFormularioActualizar.set(false);
+  }
+
   protected seleccionarEquipo(equipo: Equipo): void {
     this.equipoSeleccionado.update((seleccionado) =>
       seleccionado?.equipo === equipo.equipo ? null : equipo,
@@ -106,5 +147,20 @@ export class Equipos {
     );
 
     this.equipoSeleccionado.set(equipo ?? null);
+  }
+
+  private precargarEquipoActualizado(): void {
+    const equipo = this.equipoSeleccionado();
+
+    if (!equipo) {
+      return;
+    }
+
+    this.equipoActualizado = {
+      equipoActual: equipo.equipo,
+      equipo: equipo.equipo,
+      pais: equipo.pais,
+      seleccionador: equipo.seleccionador,
+    };
   }
 }
