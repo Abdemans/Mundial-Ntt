@@ -1,1 +1,28 @@
-<p>home works!</p>
+<header class="site-header">
+  <nav class="main-nav" aria-label="Navegacion principal">
+    <a class="brand" routerLink="/">
+      <span class="brand-mark" aria-hidden="true">M</span>
+      <span>Mundial</span>
+    </a>
+
+    <div class="nav-links">
+      @for (item of navItems(); track item.path) {
+        <a
+          [routerLink]="item.path"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: item.path === '/' }"
+        >
+          {{ item.label }}
+        </a>
+      }
+    </div>
+  </nav>
+</header>
+
+<main class="home-content">
+  <section class="welcome">
+    <p class="eyebrow">Gestion deportiva</p>
+    <h1>Panel del Mundial</h1>
+    <p>Consulta y administra equipos y jugadores desde una interfaz sencilla.</p>
+  </section>
+</main>
