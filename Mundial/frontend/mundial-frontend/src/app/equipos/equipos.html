@@ -29,8 +29,13 @@
             name="equipo"
             type="text"
             required
+            [class.input-error]="errorEquipo()"
+            (ngModelChange)="errorEquipo.set('')"
             [(ngModel)]="nuevoEquipo.equipo"
           />
+          @if (errorEquipo()) {
+            <span class="field-error">{{ errorEquipo() }}</span>
+          }
         </label>
 
         <label>

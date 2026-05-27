@@ -8,6 +8,7 @@ import { MainNav } from '../shared/main-nav/main-nav';
 
 @Component({
   selector: 'app-jugadores',
+  standalone: true,
   imports: [FormsModule, MainNav, RouterLink],
   templateUrl: './jugadores.html',
   styleUrl: './jugadores.css',
@@ -19,6 +20,8 @@ export class Jugadores {
   protected readonly mostrarFormulario = signal(false);
   protected readonly mostrarFormularioEliminar = signal(false);
   protected readonly jugadorSeleccionado = signal<Jugador | null>(null);
+  protected readonly errorJugador = signal('');
+  protected readonly errorEquipo = signal('');
   protected readonly jugadores = toSignal(this.jugadorService.jugadores$, {
     initialValue: [],
   });
@@ -34,6 +37,8 @@ export class Jugadores {
 
   protected alternarFormulario(): void {
     this.mostrarFormulario.update((visible) => !visible);
+    this.errorJugador.set('');
+    this.errorEquipo.set('');
   }
 
   protected alternarFormularioEliminar(): void {
@@ -41,12 +46,20 @@ export class Jugadores {
   }
 
   protected anadirJugador(): void {
+    const jugadorNombre = this.nuevoJugador.nombre.trim().toUpperCase();
     const equipoNombre = this.nuevoJugador.equipo.trim().toUpperCase();
-    const equipo: Equipo = this.equipoService.buscarEquipo(equipoNombre) ?? {
-      equipo: equipoNombre,
-      pais: '',
-      seleccionador: '',
-    };
+    const equipo: Equipo | undefined = this.equipoService.buscarEquipo(equipoNombre);
+
+    if (this.jugadorService.buscarJugador(jugadorNombre)) {
+      this.errorJugador.set(`El jugador ${jugadorNombre} ya existe.`);
+      return;
+    }
+
+    if (!equipo) {
+      this.errorEquipo.set(`El equipo ${equipoNombre} no existe.`);
+      return;
+    }
+
     const jugador: Jugador = {
       nombre: this.nuevoJugador.nombre.trim().toUpperCase(),
       direccion: this.nuevoJugador.direccion.trim(),
@@ -56,6 +69,8 @@ export class Jugadores {
     };
 
     this.jugadorService.anadirJugador(jugador);
+    this.errorJugador.set('');
+    this.errorEquipo.set('');
     this.nuevoJugador = {
       nombre: '',
       direccion: '',

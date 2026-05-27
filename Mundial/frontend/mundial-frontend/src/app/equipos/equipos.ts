@@ -8,6 +8,7 @@ import { MainNav } from '../shared/main-nav/main-nav';
 
 @Component({
   selector: 'app-equipos',
+  standalone: true,
   imports: [FormsModule, MainNav],
   templateUrl: './equipos.html',
   styleUrl: './equipos.css',
@@ -20,6 +21,7 @@ export class Equipos {
   protected readonly mostrarFormulario = signal(false);
   protected readonly mostrarFormularioEliminar = signal(false);
   protected readonly equipoSeleccionado = signal<Equipo | null>(null);
+  protected readonly errorEquipo = signal('');
   protected readonly equipos = toSignal(this.equipoService.equipos$, {
     initialValue: [],
   });
@@ -44,6 +46,7 @@ export class Equipos {
 
   protected alternarFormulario(): void {
     this.mostrarFormulario.update((visible) => !visible);
+    this.errorEquipo.set('');
   }
 
   protected alternarFormularioEliminar(): void {
@@ -51,13 +54,21 @@ export class Equipos {
   }
 
   protected anadirEquipo(): void {
+    const equipoNombre = this.nuevoEquipo.equipo.trim().toUpperCase();
+
+    if (this.equipoService.buscarEquipo(equipoNombre)) {
+      this.errorEquipo.set(`El equipo ${equipoNombre} ya existe.`);
+      return;
+    }
+
     const equipo: Equipo = {
-      equipo: this.nuevoEquipo.equipo.trim().toUpperCase(),
+      equipo: equipoNombre,
       pais: this.nuevoEquipo.pais.trim(),
       seleccionador: this.nuevoEquipo.seleccionador.trim(),
     };
 
     this.equipoService.anadirEquipo(equipo);
+    this.errorEquipo.set('');
     this.nuevoEquipo = {
       equipo: '',
       pais: '',

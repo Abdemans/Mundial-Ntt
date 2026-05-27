@@ -56,4 +56,10 @@ export class JugadorService {
       this.jugadoresSubject.value.filter((registro) => registro.nombre !== jugador),
     );
   }
+
+  buscarJugador(nombre: string): Jugador | undefined {
+    const jugador = nombre.trim().toUpperCase();
+
+    return this.jugadoresSubject.value.find((registro) => registro.nombre === jugador);
+  }
 }

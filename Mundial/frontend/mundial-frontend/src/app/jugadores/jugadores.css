@@ -104,6 +104,16 @@ input {
   font: inherit;
 }
 
+.input-error {
+  border-color: #dc3545;
+}
+
+.field-error {
+  color: #b02a37;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
 .form-actions {
   display: flex;
   justify-content: flex-end;

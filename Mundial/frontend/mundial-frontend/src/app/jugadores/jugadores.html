@@ -29,8 +29,13 @@
             name="nombre"
             type="text"
             required
+            [class.input-error]="errorJugador()"
+            (ngModelChange)="errorJugador.set('')"
             [(ngModel)]="nuevoJugador.nombre"
           />
+          @if (errorJugador()) {
+            <span class="field-error">{{ errorJugador() }}</span>
+          }
         </label>
 
         <label>
@@ -57,7 +62,7 @@
           Fecha nacimiento
           <input
             name="fechaNac"
-            type="datetime-local"
+            type="date"
             required
             [(ngModel)]="nuevoJugador.fechaNac"
           />
@@ -69,8 +74,13 @@
             name="equipo"
             type="text"
             required
+            [class.input-error]="errorEquipo()"
+            (ngModelChange)="errorEquipo.set('')"
             [(ngModel)]="nuevoJugador.equipo"
           />
+          @if (errorEquipo()) {
+            <span class="field-error">{{ errorEquipo() }}</span>
+          }
         </label>
 
         <div class="form-actions">
