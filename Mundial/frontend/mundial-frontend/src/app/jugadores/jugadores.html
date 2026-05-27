@@ -1,1 +1,145 @@
-<p>jugadores works!</p>
+<app-main-nav />
+
+<main class="page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Jugadores</p>
+      <h1>Listado de jugadores</h1>
+    </div>
+    <div class="header-actions">
+      <button class="primary-button" type="button" (click)="alternarFormulario()">
+        Añadir Jugador
+      </button>
+      <button
+        class="danger-button"
+        type="button"
+        (click)="alternarFormularioEliminar()"
+      >
+        Eliminar Jugador
+      </button>
+    </div>
+  </header>
+
+  @if (mostrarFormulario()) {
+    <section class="form-panel" aria-label="Formulario de jugador">
+      <form (ngSubmit)="anadirJugador()" #jugadorForm="ngForm">
+        <label>
+          Nombre
+          <input
+            name="nombre"
+            type="text"
+            required
+            [(ngModel)]="nuevoJugador.nombre"
+          />
+        </label>
+
+        <label>
+          Direccion
+          <input
+            name="direccion"
+            type="text"
+            required
+            [(ngModel)]="nuevoJugador.direccion"
+          />
+        </label>
+
+        <label>
+          Puesto
+          <input
+            name="puestoHab"
+            type="text"
+            required
+            [(ngModel)]="nuevoJugador.puestoHab"
+          />
+        </label>
+
+        <label>
+          Fecha nacimiento
+          <input
+            name="fechaNac"
+            type="datetime-local"
+            required
+            [(ngModel)]="nuevoJugador.fechaNac"
+          />
+        </label>
+
+        <label>
+          Equipo
+          <input
+            name="equipo"
+            type="text"
+            required
+            [(ngModel)]="nuevoJugador.equipo"
+          />
+        </label>
+
+        <div class="form-actions">
+          <button class="secondary-button" type="button" (click)="alternarFormulario()">
+            Cancelar
+          </button>
+          <button class="primary-button" type="submit" [disabled]="jugadorForm.invalid">
+            Guardar
+          </button>
+        </div>
+      </form>
+    </section>
+  }
+
+  @if (mostrarFormularioEliminar()) {
+    <section class="form-panel" aria-label="Formulario de eliminar jugador">
+      <form (ngSubmit)="eliminarJugador()" #eliminarForm="ngForm">
+        <label>
+          Nombre del jugador
+          <input
+            name="jugadorAEliminar"
+            type="text"
+            required
+            [(ngModel)]="jugadorAEliminar"
+          />
+        </label>
+
+        <div class="form-actions">
+          <button
+            class="secondary-button"
+            type="button"
+            (click)="alternarFormularioEliminar()"
+          >
+            Cancelar
+          </button>
+          <button class="danger-button" type="submit" [disabled]="eliminarForm.invalid">
+            Eliminar
+          </button>
+        </div>
+      </form>
+    </section>
+  }
+
+  <section class="table-wrap" aria-label="Tabla de jugadores">
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Direccion</th>
+          <th>Puesto</th>
+          <th>Fecha nacimiento</th>
+          <th>Equipo</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (jugador of jugadores(); track jugador.nombre) {
+          <tr>
+            <td>{{ jugador.nombre }}</td>
+            <td>{{ jugador.direccion }}</td>
+            <td>{{ jugador.puestoHab }}</td>
+            <td>{{ jugador.fechaNac }}</td>
+            <td>{{ jugador.equipoJugador.equipo }}</td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="5">No hay jugadores registrados.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </section>
+</main>

@@ -1,1 +1,121 @@
-<p>equipos works!</p>
+<app-main-nav />
+
+<main class="page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Equipos</p>
+      <h1>Listado de equipos</h1>
+    </div>
+    <div class="header-actions">
+      <button class="primary-button" type="button" (click)="alternarFormulario()">
+        Añadir Equipo
+      </button>
+      <button
+        class="danger-button"
+        type="button"
+        (click)="alternarFormularioEliminar()"
+      >
+        Eliminar Equipo
+      </button>
+    </div>
+  </header>
+
+  @if (mostrarFormulario()) {
+    <section class="form-panel" aria-label="Formulario de equipo">
+      <form (ngSubmit)="anadirEquipo()" #equipoForm="ngForm">
+        <label>
+          Equipo
+          <input
+            name="equipo"
+            type="text"
+            required
+            [(ngModel)]="nuevoEquipo.equipo"
+          />
+        </label>
+
+        <label>
+          Pais
+          <input
+            name="pais"
+            type="text"
+            required
+            [(ngModel)]="nuevoEquipo.pais"
+          />
+        </label>
+
+        <label>
+          Seleccionador
+          <input
+            name="seleccionador"
+            type="text"
+            required
+            [(ngModel)]="nuevoEquipo.seleccionador"
+          />
+        </label>
+
+        <div class="form-actions">
+          <button class="secondary-button" type="button" (click)="alternarFormulario()">
+            Cancelar
+          </button>
+          <button class="primary-button" type="submit" [disabled]="equipoForm.invalid">
+            Guardar
+          </button>
+        </div>
+      </form>
+    </section>
+  }
+
+  @if (mostrarFormularioEliminar()) {
+    <section class="form-panel" aria-label="Formulario de eliminar equipo">
+      <form (ngSubmit)="eliminarEquipo()" #eliminarForm="ngForm">
+        <label>
+          Nombre del equipo
+          <input
+            name="equipoAEliminar"
+            type="text"
+            required
+            [(ngModel)]="equipoAEliminar"
+          />
+        </label>
+
+        <div class="form-actions">
+          <button
+            class="secondary-button"
+            type="button"
+            (click)="alternarFormularioEliminar()"
+          >
+            Cancelar
+          </button>
+          <button class="danger-button" type="submit" [disabled]="eliminarForm.invalid">
+            Eliminar
+          </button>
+        </div>
+      </form>
+    </section>
+  }
+
+  <section class="table-wrap" aria-label="Tabla de equipos">
+    <table>
+      <thead>
+        <tr>
+          <th>Equipo</th>
+          <th>Pais</th>
+          <th>Seleccionador</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (equipo of equipos(); track equipo.equipo) {
+          <tr>
+            <td>{{ equipo.equipo }}</td>
+            <td>{{ equipo.pais }}</td>
+            <td>{{ equipo.seleccionador }}</td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="3">No hay equipos registrados.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </section>
+</main>
