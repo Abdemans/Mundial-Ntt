@@ -57,12 +57,12 @@ export class JugadorService {
     );
   }
 
-<<<<<<< HEAD
   buscarJugador(nombre: string): Jugador | undefined {
     const jugador = nombre.trim().toUpperCase();
 
     return this.jugadoresSubject.value.find((registro) => registro.nombre === jugador);
-=======
+  }
+
   actualizarJugador(nombreActual: string, jugadorActualizado: Jugador): void {
     const jugador = nombreActual.trim().toUpperCase();
 
@@ -83,6 +83,5 @@ export class JugadorService {
           : jugador,
       ),
     );
->>>>>>> frontend-aaron
   }
 }
