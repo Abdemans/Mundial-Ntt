@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import type { Jugador } from '../models';
+import type { Equipo, Jugador } from '../models';
 
 const JUGADORES_INICIALES: Jugador[] = [
   {
@@ -54,6 +54,28 @@ export class JugadorService {
 
     this.jugadoresSubject.next(
       this.jugadoresSubject.value.filter((registro) => registro.nombre !== jugador),
+    );
+  }
+
+  actualizarJugador(nombreActual: string, jugadorActualizado: Jugador): void {
+    const jugador = nombreActual.trim().toUpperCase();
+
+    this.jugadoresSubject.next(
+      this.jugadoresSubject.value.map((registro) =>
+        registro.nombre === jugador ? jugadorActualizado : registro,
+      ),
+    );
+  }
+
+  actualizarEquipoDeJugadores(nombreActualEquipo: string, equipoActualizado: Equipo): void {
+    const equipo = nombreActualEquipo.trim().toUpperCase();
+
+    this.jugadoresSubject.next(
+      this.jugadoresSubject.value.map((jugador) =>
+        jugador.equipoJugador.equipo === equipo
+          ? { ...jugador, equipoJugador: equipoActualizado }
+          : jugador,
+      ),
     );
   }
 }

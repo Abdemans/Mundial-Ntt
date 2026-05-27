@@ -39,6 +39,16 @@ export class EquipoService {
     );
   }
 
+  actualizarEquipo(nombreActual: string, equipoActualizado: Equipo): void {
+    const equipo = nombreActual.trim().toUpperCase();
+
+    this.equiposSubject.next(
+      this.equiposSubject.value.map((registro) =>
+        registro.equipo === equipo ? equipoActualizado : registro,
+      ),
+    );
+  }
+
   buscarEquipo(nombre: string): Equipo | undefined {
     const equipo = nombre.trim().toUpperCase();
 

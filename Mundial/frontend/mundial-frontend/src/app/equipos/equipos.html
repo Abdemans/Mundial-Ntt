@@ -11,6 +11,13 @@
         Añadir Equipo
       </button>
       <button
+        class="warning-button"
+        type="button"
+        (click)="alternarFormularioActualizar()"
+      >
+        Actualizar Equipo
+      </button>
+      <button
         class="danger-button"
         type="button"
         (click)="alternarFormularioEliminar()"
@@ -59,6 +66,65 @@
           </button>
           <button class="primary-button" type="submit" [disabled]="equipoForm.invalid">
             Guardar
+          </button>
+        </div>
+      </form>
+    </section>
+  }
+
+  @if (mostrarFormularioActualizar()) {
+    <section class="form-panel" aria-label="Formulario de actualizar equipo">
+      <form (ngSubmit)="actualizarEquipo()" #actualizarForm="ngForm">
+        <label>
+          Equipo actual
+          <input
+            name="equipoActual"
+            type="text"
+            required
+            [(ngModel)]="equipoActualizado.equipoActual"
+          />
+        </label>
+
+        <label>
+          Nuevo equipo
+          <input
+            name="equipoActualizado"
+            type="text"
+            required
+            [(ngModel)]="equipoActualizado.equipo"
+          />
+        </label>
+
+        <label>
+          Pais
+          <input
+            name="paisActualizado"
+            type="text"
+            required
+            [(ngModel)]="equipoActualizado.pais"
+          />
+        </label>
+
+        <label>
+          Seleccionador
+          <input
+            name="seleccionadorActualizado"
+            type="text"
+            required
+            [(ngModel)]="equipoActualizado.seleccionador"
+          />
+        </label>
+
+        <div class="form-actions">
+          <button
+            class="secondary-button"
+            type="button"
+            (click)="alternarFormularioActualizar()"
+          >
+            Cancelar
+          </button>
+          <button class="warning-button" type="submit" [disabled]="actualizarForm.invalid">
+            Actualizar
           </button>
         </div>
       </form>
