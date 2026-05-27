@@ -1,17 +1,19 @@
 import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import type { Jugador } from '../models';
 import { MainNav } from '../shared/main-nav/main-nav';
 
 @Component({
   selector: 'app-jugadores',
-  imports: [FormsModule, MainNav],
+  imports: [FormsModule, MainNav, RouterLink],
   templateUrl: './jugadores.html',
   styleUrl: './jugadores.css',
 })
 export class Jugadores {
   protected readonly mostrarFormulario = signal(false);
   protected readonly mostrarFormularioEliminar = signal(false);
+  protected readonly jugadorSeleccionado = signal<Jugador | null>(null);
   protected nuevoJugador = {
     nombre: '',
     direccion: '',
@@ -26,7 +28,7 @@ export class Jugadores {
       nombre: 'LIONEL MESSI',
       direccion: 'Rosario',
       puestoHab: 'Delantero',
-      fechaNac: '1987-06-24T00:00:00',
+      fechaNac: '1987-06-24',
       equipoJugador: {
         equipo: 'ARGENTINA',
         pais: 'Argentina',
@@ -37,7 +39,7 @@ export class Jugadores {
       nombre: 'KYLIAN MBAPPE',
       direccion: 'Paris',
       puestoHab: 'Delantero',
-      fechaNac: '1998-12-20T00:00:00',
+      fechaNac: '1998-12-20',
       equipoJugador: {
         equipo: 'FRANCIA',
         pais: 'Francia',
@@ -48,10 +50,10 @@ export class Jugadores {
       nombre: 'RODRI',
       direccion: 'Madrid',
       puestoHab: 'Centrocampista',
-      fechaNac: '1996-06-22T00:00:00',
+      fechaNac: '1996-06-22',
       equipoJugador: {
-        equipo: 'ESPANA',
-        pais: 'Espana',
+        equipo: 'ESPAÑA',
+        pais: 'España',
         seleccionador: 'Luis de la Fuente',
       },
     },
@@ -95,7 +97,16 @@ export class Jugadores {
     this.jugadores.update((jugadores) =>
       jugadores.filter((jugador) => jugador.nombre !== nombre),
     );
+    if (this.jugadorSeleccionado()?.nombre === nombre) {
+      this.jugadorSeleccionado.set(null);
+    }
     this.jugadorAEliminar = '';
     this.mostrarFormularioEliminar.set(false);
+  }
+
+  protected seleccionarJugador(jugador: Jugador): void {
+    this.jugadorSeleccionado.update((seleccionado) =>
+      seleccionado?.nombre === jugador.nombre ? null : jugador,
+    );
   }
 }
