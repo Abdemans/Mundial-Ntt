@@ -40,6 +40,7 @@ h1 {
 
 .primary-button,
 .secondary-button,
+.warning-button,
 .danger-button {
   min-height: 2.5rem;
   border: 1px solid transparent;
@@ -67,13 +68,20 @@ h1 {
   box-shadow: 0 12px 24px rgba(239, 68, 68, 0.18);
 }
 
+.warning-button {
+  background: linear-gradient(135deg, var(--warning), var(--primary-2));
+  box-shadow: 0 12px 24px rgba(245, 158, 11, 0.18);
+}
+
 .primary-button:hover,
 .secondary-button:hover,
+.warning-button:hover,
 .danger-button:hover {
   transform: translateY(-1px);
 }
 
 .primary-button:disabled,
+.warning-button:disabled,
 .danger-button:disabled {
   cursor: not-allowed;
   opacity: 0.55;
