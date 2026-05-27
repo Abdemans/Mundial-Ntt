@@ -127,12 +127,26 @@
       </thead>
       <tbody>
         @for (jugador of jugadores(); track jugador.nombre) {
-          <tr>
+          <tr
+            class="clickable-row"
+            [class.selected]="jugadorSeleccionado()?.nombre === jugador.nombre"
+            tabindex="0"
+            (click)="seleccionarJugador(jugador)"
+            (keydown.enter)="seleccionarJugador(jugador)"
+          >
             <td>{{ jugador.nombre }}</td>
             <td>{{ jugador.direccion }}</td>
             <td>{{ jugador.puestoHab }}</td>
             <td>{{ jugador.fechaNac }}</td>
-            <td>{{ jugador.equipoJugador.equipo }}</td>
+            <td>
+              <a
+                class="team-link"
+                [routerLink]="['/equipos', jugador.equipoJugador.equipo]"
+                (click)="$event.stopPropagation()"
+              >
+                {{ jugador.equipoJugador.equipo }}
+              </a>
+            </td>
           </tr>
         } @empty {
           <tr>
@@ -142,4 +156,47 @@
       </tbody>
     </table>
   </section>
+
+  @if (jugadorSeleccionado(); as jugador) {
+    <section class="detail-panel" aria-label="Detalle del jugador seleccionado">
+      <div class="detail-header">
+        <p class="eyebrow">Detalle jugador</p>
+        <h2>{{ jugador.nombre }}</h2>
+      </div>
+
+      <dl class="detail-grid">
+        <div>
+          <dt>Direccion</dt>
+          <dd>{{ jugador.direccion }}</dd>
+        </div>
+        <div>
+          <dt>Puesto habitual</dt>
+          <dd>{{ jugador.puestoHab }}</dd>
+        </div>
+        <div>
+          <dt>Fecha nacimiento</dt>
+          <dd>{{ jugador.fechaNac }}</dd>
+        </div>
+        <div>
+          <dt>Equipo</dt>
+          <dd>
+            <a
+              class="team-link"
+              [routerLink]="['/equipos', jugador.equipoJugador.equipo]"
+            >
+              {{ jugador.equipoJugador.equipo }}
+            </a>
+          </dd>
+        </div>
+        <div>
+          <dt>Pais equipo</dt>
+          <dd>{{ jugador.equipoJugador.pais || 'Sin pais asignado' }}</dd>
+        </div>
+        <div>
+          <dt>Seleccionador</dt>
+          <dd>{{ jugador.equipoJugador.seleccionador || 'Sin seleccionador asignado' }}</dd>
+        </div>
+      </dl>
+    </section>
+  }
 </main>

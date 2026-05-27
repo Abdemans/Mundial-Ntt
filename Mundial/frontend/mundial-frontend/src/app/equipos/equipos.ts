@@ -1,6 +1,9 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import type { Equipo } from '../models';
+import { ActivatedRoute } from '@angular/router';
+import type { Equipo, Jugador } from '../models';
+import { EquipoService, JugadorService } from '../services';
 import { MainNav } from '../shared/main-nav/main-nav';
 
 @Component({
@@ -10,8 +13,20 @@ import { MainNav } from '../shared/main-nav/main-nav';
   styleUrl: './equipos.css',
 })
 export class Equipos {
+  private readonly route = inject(ActivatedRoute);
+  private readonly equipoService = inject(EquipoService);
+  private readonly jugadorService = inject(JugadorService);
+
   protected readonly mostrarFormulario = signal(false);
   protected readonly mostrarFormularioEliminar = signal(false);
+  protected readonly equipoSeleccionado = signal<Equipo | null>(null);
+  protected readonly equipos = toSignal(this.equipoService.equipos$, {
+    initialValue: [],
+  });
+  protected readonly jugadores = toSignal(this.jugadorService.jugadores$, {
+    initialValue: [],
+  });
+
   protected nuevoEquipo = {
     equipo: '',
     pais: '',
@@ -19,23 +34,13 @@ export class Equipos {
   };
   protected equipoAEliminar = '';
 
-  protected readonly equipos = signal<Equipo[]>([
-    {
-      equipo: 'ARGENTINA',
-      pais: 'Argentina',
-      seleccionador: 'Lionel Scaloni',
-    },
-    {
-      equipo: 'FRANCIA',
-      pais: 'Francia',
-      seleccionador: 'Didier Deschamps',
-    },
-    {
-      equipo: 'ESPANA',
-      pais: 'Espana',
-      seleccionador: 'Luis de la Fuente',
-    },
-  ]);
+  constructor() {
+    const equipo = this.route.snapshot.paramMap.get('equipo');
+
+    if (equipo) {
+      this.seleccionarEquipoPorNombre(equipo);
+    }
+  }
 
   protected alternarFormulario(): void {
     this.mostrarFormulario.update((visible) => !visible);
@@ -52,7 +57,7 @@ export class Equipos {
       seleccionador: this.nuevoEquipo.seleccionador.trim(),
     };
 
-    this.equipos.update((equipos) => [...equipos, equipo]);
+    this.equipoService.anadirEquipo(equipo);
     this.nuevoEquipo = {
       equipo: '',
       pais: '',
@@ -64,10 +69,31 @@ export class Equipos {
   protected eliminarEquipo(): void {
     const equipo = this.equipoAEliminar.trim().toUpperCase();
 
-    this.equipos.update((equipos) =>
-      equipos.filter((registro) => registro.equipo !== equipo),
-    );
+    this.equipoService.eliminarEquipo(equipo);
+    if (this.equipoSeleccionado()?.equipo === equipo) {
+      this.equipoSeleccionado.set(null);
+    }
     this.equipoAEliminar = '';
     this.mostrarFormularioEliminar.set(false);
+  }
+
+  protected seleccionarEquipo(equipo: Equipo): void {
+    this.equipoSeleccionado.update((seleccionado) =>
+      seleccionado?.equipo === equipo.equipo ? null : equipo,
+    );
+  }
+
+  protected jugadoresVinculados(equipo: Equipo): Jugador[] {
+    return this.jugadores().filter(
+      (jugador) => jugador.equipoJugador.equipo === equipo.equipo,
+    );
+  }
+
+  private seleccionarEquipoPorNombre(nombre: string): void {
+    const equipo = this.equipos().find(
+      (registro) => registro.equipo === nombre.trim().toUpperCase(),
+    );
+
+    this.equipoSeleccionado.set(equipo ?? null);
   }
 }

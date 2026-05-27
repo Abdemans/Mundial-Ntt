@@ -105,7 +105,13 @@
       </thead>
       <tbody>
         @for (equipo of equipos(); track equipo.equipo) {
-          <tr>
+          <tr
+            class="clickable-row"
+            [class.selected]="equipoSeleccionado()?.equipo === equipo.equipo"
+            tabindex="0"
+            (click)="seleccionarEquipo(equipo)"
+            (keydown.enter)="seleccionarEquipo(equipo)"
+          >
             <td>{{ equipo.equipo }}</td>
             <td>{{ equipo.pais }}</td>
             <td>{{ equipo.seleccionador }}</td>
@@ -118,4 +124,48 @@
       </tbody>
     </table>
   </section>
+
+  @if (equipoSeleccionado(); as equipo) {
+    <section class="detail-panel" aria-label="Detalle del equipo seleccionado">
+      <div class="detail-header">
+        <p class="eyebrow">Detalle equipo</p>
+        <h2>{{ equipo.equipo }}</h2>
+      </div>
+
+      <dl class="detail-grid">
+        <div>
+          <dt>Equipo</dt>
+          <dd>{{ equipo.equipo }}</dd>
+        </div>
+        <div>
+          <dt>Pais</dt>
+          <dd>{{ equipo.pais }}</dd>
+        </div>
+        <div>
+          <dt>Seleccionador</dt>
+          <dd>{{ equipo.seleccionador }}</dd>
+        </div>
+        <div>
+          <dt>Jugadores vinculados</dt>
+          <dd>{{ jugadoresVinculados(equipo).length }}</dd>
+        </div>
+      </dl>
+
+      <div class="linked-players">
+        <h3>Jugadores</h3>
+        @if (jugadoresVinculados(equipo).length > 0) {
+          <ul>
+            @for (jugador of jugadoresVinculados(equipo); track jugador.nombre) {
+              <li>
+                <strong>{{ jugador.nombre }}</strong>
+                <span>{{ jugador.puestoHab }}</span>
+              </li>
+            }
+          </ul>
+        } @else {
+          <p>No hay jugadores vinculados a este equipo.</p>
+        }
+      </div>
+    </section>
+  }
 </main>
