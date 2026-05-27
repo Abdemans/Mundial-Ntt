@@ -5,6 +5,13 @@ Coordinar el desarrollo de software usando agentes especializados para frontend 
 
 ---
 
+## Contexto de Dominio: Club Deportivo (H2 en Memoria)
+Esquema relacional de 2 tablas para motor H2 en memoria, con identificadores basados en texto:
+- **equipos**: `EQUIPO` (PK - String), `PAIS` (String), `SELECCIONADOR` (String).
+- **jugador**: `NOMBRE` (PK - String), `DIRECCION` (String), `PUESTO_HAB` (String), `FECHA_NAC` (DateTime), `EQUIPO_JUGADOR` (FK -> `equipos.EQUIPO`).
+
+---
+
 ## Agentes disponibles
 
 ### Frontend → `.\agente-frontend\agente-angular.md`
@@ -28,22 +35,21 @@ Usar para:
 - Lógica de negocio
 - DTOs y validaciones
 
-
 ---
 
 ## Skills disponibles
 
-### Persistencia Relacional → `.\skills\skill-jpa-mysql.md`
+### Persistencia Relacional 1:M → `.\skills\skill-jpa-h2.md`
 Usar para:
-- Configuración de claves compuestas mediante `@IdClass` o `@Embeddable`.
+- Configuración de la relación `@OneToMany` y `@ManyToOne` para base de datos H2 en memoria.
 - Resolución y corte de bucles infinitos de recursividad JSON con `@JsonIgnoreProperties`.
-- Mapeo estricto de tipos de datos de MySQL (`datetime` a `LocalDateTime`) e inyección por constructor.
+- Mapeo de PKs manuales de tipo String sin generación automática.
 - Habilitación de políticas CORS mediante `@CrossOrigin`.
 
-### UI Reactiva Avanzada → `.\skills\skill-angular-signals.md`
+### UI Reactiva Avanzada con Signals → `.\skills\skill-angular-signals.md`
 Usar para:
 - Desarrollo de componentes autónomos modernos (`standalone: true`).
-- Control de estado reactivo asíncrono utilizando exclusivamente `signal()`, `.set()` y `.update()`.
+- Control de estado reactivo asíncrono utilizando exclusivamente `signal()`.
 - Renderizado de vistas HTML con el nuevo control de flujo nativo (`@if`, `@for`, `@empty`).
 - Inyección funcional de servicios mediante la directiva `inject()`.
 
@@ -53,7 +59,6 @@ Usar para:
 
 ### 1. Comprender
 Analiza requisitos, restricciones y dependencias.
-
 Si falta información importante, preguntar antes de implementar.
 
 ### 2. Planificar
@@ -65,53 +70,22 @@ Antes de escribir código:
 
 ### 3. Delegar
 Seleccionar el agente adecuado:
-
 **Frontend** → UI, formularios, componentes.
-
 **Backend** → APIs, persistencia, lógica de negocio.
 
-**Fullstack** → dividir responsabilidades.
-
 ### 4. Implementar
-Realizar cambios:
-- pequeños
-- verificables
-- coherentes con la arquitectura
+Realizar cambios pequeños, verificables y coherentes con la arquitectura.
 
 ### 5. Validar
-Comprobar:
-- compilación
-- mantenibilidad
-- seguridad
-- rendimiento
-- errores
+Comprobar compilación, mantenibilidad, seguridad, rendimiento y errores.
 
 ---
 
 ## Reglas globales
-
-Nunca:
-- inventar APIs
-- asumir requisitos
-- duplicar código
-- romper arquitectura
-- mezclar frontend y backend
-
-Siempre:
-- seguir Clean Code
-- usar SOLID
-- priorizar mantenibilidad
-- validar antes de finalizar
+Nunca: Inventar APIs, asumir requisitos, duplicar código o romper la arquitectura.
+Siempre: Seguir Clean Code, usar SOLID, priorizar la mantenibilidad y validar antes de finalizar.
 
 ---
 
 ## Vibe Coding
-
-Permitido, pero:
-- primero plan
-- cambios pequeños
-- revisar código generado
-- validar resultados
-- no asumir que la IA tiene razón
-
----
+Permitido, pero: primero plan, cambios pequeños, revisar código generado, validar resultados y no asumir que la IA tiene razón.
