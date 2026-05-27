@@ -1,9 +1,37 @@
--- 1. Insertar Selecciones en la tabla EQUIPO
-INSERT INTO equipos (equipo, pais, seleccionador) VALUES ('ARGENTINA', 'Argentina', 'Lionel Scaloni');
-INSERT INTO equipos (equipo, pais, seleccionador) VALUES ('ESPANA', 'España', 'Luis de la Fuente');
-INSERT INTO equipos (equipo, pais, seleccionador) VALUES ('FRANCIA', 'Francia', 'Didier Deschamps');
+-- =============================================================================
+-- 1. SELECCIONES (Tabla: equipos en plural como tu @Table)
+-- =============================================================================
+INSERT INTO equipos (EQUIPO, PAIS, SELECCIONADOR) VALUES ('ARGENTINA', 'Argentina', 'Lionel Scaloni');
+INSERT INTO equipos (EQUIPO, PAIS, SELECCIONADOR) VALUES ('ESPANA', 'España', 'Luis de la Fuente');
+INSERT INTO equipos (EQUIPO, PAIS, SELECCIONADOR) VALUES ('FRANCIA', 'Francia', 'Didier Deschamps');
+INSERT INTO equipos (EQUIPO, PAIS, SELECCIONADOR) VALUES ('BRASIL', 'Brasil', 'Dorival Júnior');
+INSERT INTO equipos (EQUIPO, PAIS, SELECCIONADOR) VALUES ('ALEMANIA', 'Alemania', 'Julian Nagelsmann');
+INSERT INTO equipos (EQUIPO, PAIS, SELECCIONADOR) VALUES ('INGLATERRA', 'Inglaterra', 'Thomas Tuchel');
 
--- 2. Insertar Jugadores en la tabla JUGADOR
-INSERT INTO jugadors (nombre, direccion, puesto_hab, fecha_nac, equipo_jugador) VALUES ('LIONEL MESSI', 'Rosario 123', 'DC', '1987-06-24 00:00:00', 'ARGENTINA');
-INSERT INTO jugadors (nombre, direccion, puesto_hab, fecha_nac, equipo_jugador) VALUES ('LAMINE YAMAL', 'Rocafonda 304', 'ED', '2007-07-13 00:00:00', 'ESPANA');
-INSERT INTO jugadors (nombre, direccion, puesto_hab, fecha_nac, equipo_jugador) VALUES ('KYLIAN MBAPPE', 'Paris 789', 'DC', '1998-12-20 00:00:00', 'FRANCIA');
+-- =============================================================================
+-- 2. JUGADORES (Tabla: jugador en singular como tu @Table)
+-- =============================================================================
+INSERT INTO jugador (Nombre, DIRECCION, PUESTO_HAB, FECHA_NAC, EQUIPO_JUGADOR) VALUES ('LIONEL MESSI', 'Rosario 123', 'DC', '1987-06-24 00:00:00', 'ARGENTINA');
+INSERT INTO jugador (Nombre, DIRECCION, PUESTO_HAB, FECHA_NAC, EQUIPO_JUGADOR) VALUES ('RODRIGO DE PAUL', 'Buenos Aires 456', 'MC', '1994-05-24 00:00:00', 'ARGENTINA');
+INSERT INTO jugador (Nombre, DIRECCION, PUESTO_HAB, FECHA_NAC, EQUIPO_JUGADOR) VALUES ('LAUTARO MARTINEZ', 'Bahia Blanca 789', 'DC', '1997-08-22 00:00:00', 'ARGENTINA');
+INSERT INTO jugador (Nombre, DIRECCION, PUESTO_HAB, FECHA_NAC, EQUIPO_JUGADOR) VALUES ('EMILIANO MARTINEZ', 'Mar del Plata 101', 'POR', '1992-09-02 00:00:00', 'ARGENTINA');
+INSERT INTO jugador (Nombre, DIRECCION, PUESTO_HAB, FECHA_NAC, EQUIPO_JUGADOR) VALUES ('LAMINE YAMAL', 'Rocafonda 304', 'ED', '2007-07-13 00:00:00', 'ESPANA');
+INSERT INTO jugador (Nombre, DIRECCION, PUESTO_HAB, FECHA_NAC, EQUIPO_JUGADOR) VALUES ('RODRI HERNANDEZ', 'Madrid 987', 'MC', '1996-06-22 00:00:00', 'ESPANA');
+INSERT INTO jugador (Nombre, DIRECCION, PUESTO_HAB, FECHA_NAC, EQUIPO_JUGADOR) VALUES ('PEDRI GONZALEZ', 'Tegueste 555', 'MC', '2002-11-25 00:00:00', 'ESPANA');
+INSERT INTO jugador (Nombre, DIRECCION, PUESTO_HAB, FECHA_NAC, EQUIPO_JUGADOR) VALUES ('NICO WILLIAMS', 'Pamplona 222', 'EI', '2002-07-12 00:00:00', 'ESPANA');
+INSERT INTO jugador (Nombre, DIRECCION, PUESTO_HAB, FECHA_NAC, EQUIPO_JUGADOR) VALUES ('KYLIAN MBAPPE', 'Paris 789', 'DC', '1998-12-20 00:00:00', 'FRANCIA');
+INSERT INTO jugador (Nombre, DIRECCION, PUESTO_HAB, FECHA_NAC, EQUIPO_JUGADOR) VALUES ('ANTOINE GRIEZMANN', 'Macon 444', 'MP', '1991-03-21 00:00:00', 'FRANCIA');
+INSERT INTO jugador (Nombre, DIRECCION, PUESTO_HAB, FECHA_NAC, EQUIPO_JUGADOR) VALUES ('AURELIEN TCHOUAMENI', 'Rouen 333', 'MC', '2000-01-27 00:00:00', 'FRANCIA');
+INSERT INTO jugador (Nombre, DIRECCION, PUESTO_HAB, FECHA_NAC, EQUIPO_JUGADOR) VALUES ('MIKE MAIGNAN', 'Cayena 111', 'POR', '1995-07-03 00:00:00', 'FRANCIA');
+INSERT INTO jugador (Nombre, DIRECCION, PUESTO_HAB, FECHA_NAC, EQUIPO_JUGADOR) VALUES ('VINICIUS JUNIOR', 'Sao Goncalo 888', 'EI', '2000-07-12 00:00:00', 'BRASIL');
+INSERT INTO jugador (Nombre, DIRECCION, PUESTO_HAB, FECHA_NAC, EQUIPO_JUGADOR) VALUES ('RODRYGO GOES', 'Osasco 777', 'ED', '2001-01-09 00:00:00', 'BRASIL');
+INSERT INTO jugador (Nombre, DIRECCION, PUESTO_HAB, FECHA_NAC, EQUIPO_JUGADOR) VALUES ('BRUNO GUIMARAES', 'Rio de Janeiro 666', 'MC', '1997-11-16 00:00:00', 'BRASIL');
+INSERT INTO jugador (Nombre, DIRECCION, PUESTO_HAB, FECHA_NAC, EQUIPO_JUGADOR) VALUES ('MARQUINHOS CORREA', 'Sao Paulo 555', 'DFC', '1994-05-14 00:00:00', 'BRASIL');
+INSERT INTO jugador (Nombre, DIRECCION, PUESTO_HAB, FECHA_NAC, EQUIPO_JUGADOR) VALUES ('FLORIAN WIRTZ', 'Pulheim 122', 'MP', '2003-05-03 00:00:00', 'ALEMANIA');
+INSERT INTO jugador (Nombre, DIRECCION, PUESTO_HAB, FECHA_NAC, EQUIPO_JUGADOR) VALUES ('JAMAL MUSIALA', 'Stuttgart 133', 'MP', '2003-02-26 00:00:00', 'ALEMANIA');
+INSERT INTO jugador (Nombre, DIRECCION, PUESTO_HAB, FECHA_NAC, EQUIPO_JUGADOR) VALUES ('ANTONIO RUDIGER', 'Berlin 144', 'DFC', '1993-03-03 00:00:00', 'ALEMANIA');
+INSERT INTO jugador (Nombre, DIRECCION, PUESTO_HAB, FECHA_NAC, EQUIPO_JUGADOR) VALUES ('KAI HAVERTZ', 'Aachen 155', 'DC', '1999-06-11 00:00:00', 'ALEMANIA');
+INSERT INTO jugador (Nombre, DIRECCION, PUESTO_HAB, FECHA_NAC, EQUIPO_JUGADOR) VALUES ('JUDE BELLINGHAM', 'Stourbridge 999', 'MC', '2003-06-29 00:00:00', 'INGLATERRA');
+INSERT INTO jugador (Nombre, DIRECCION, PUESTO_HAB, FECHA_NAC, EQUIPO_JUGADOR) VALUES ('HARRY KANE', 'Walthamstow 888', 'DC', '1993-07-28 00:00:00', 'INGLATERRA');
+INSERT INTO jugador (Nombre, DIRECCION, PUESTO_HAB, FECHA_NAC, EQUIPO_JUGADOR) VALUES ('BUKAYO SAKA', 'Londres 777', 'ED', '2001-09-05 00:00:00', 'INGLATERRA');
+INSERT INTO jugador (Nombre, DIRECCION, PUESTO_HAB, FECHA_NAC, EQUIPO_JUGADOR) VALUES ('PHIL FODEN', 'Stockport 666', 'MP', '2000-05-28 00:00:00', 'INGLATERRA');
