@@ -1,21 +1,12 @@
 import { Component, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
-
-interface NavItem {
-  label: string;
-  path: string;
-}
+import { MainNav } from '../shared/main-nav/main-nav';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, RouterLinkActive],
+  imports: [MainNav],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
 export class Home {
-  protected readonly navItems = signal<NavItem[]>([
-    { label: 'Inicio', path: '/' },
-    { label: 'Equipos', path: '/equipos' },
-    { label: 'Jugadores', path: '/jugadores' },
-  ]);
+  protected readonly title = signal('Panel del Mundial');
 }
